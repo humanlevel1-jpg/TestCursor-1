@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>명언 모음</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f5f5f7;
+            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 680px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #1d1d1f;
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 50px;
+            letter-spacing: -0.02em;
+        }
+
+        .quote-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 60px 50px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        .quote-card:hover {
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .quote-text {
+            font-size: 1.75rem;
+            color: #1d1d1f;
+            line-height: 1.5;
+            margin-bottom: 24px;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .quote-text::before {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, #007aff, #5856d6);
+            margin: 0 auto 30px;
+            border-radius: 2px;
+        }
+
+        .quote-author {
+            font-size: 1.1rem;
+            color: #86868b;
+            font-weight: 400;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 0.2s forwards;
+        }
+
+        .quote-author::before {
+            content: '';
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            background: #007aff;
+            color: white;
+            border: none;
+            border-radius: 980px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            letter-spacing: -0.01em;
+        }
+
+        .btn:hover {
+            background: #0066d6;
+            transform: scale(1.02);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-nav {
+            background: transparent;
+            color: #007aff;
+            border: 1px solid #007aff;
+        }
+
+        .btn-nav:hover {
+            background: #007aff;
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .quote-number {
+            color: #86868b;
+            font-size: 0.85rem;
+            margin-top: 24px;
+            font-weight: 400;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .quote-text {
+                font-size: 1.35rem;
+            }
+            .quote-card {
+                padding: 40px 24px;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>오늘의 명언</h1>
+        <div class="quote-card">
+            <p class="quote-text" id="quote"></p>
+            <p class="quote-author" id="author"></p>
+            <p class="quote-number" id="number"></p>
+            <div class="btn-group">
+                <button class="btn btn-nav" onclick="showPrevQuote()">이전 명언</button>
+                <button class="btn" onclick="showRandomQuote()">랜덤 명언</button>
+                <button class="btn btn-nav" onclick="showNextQuote()">다음 명언</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quotes = [
+            {
+                text: "인생은 속도가 아니라 방향이다.",
+                author: "괴테"
+            },
+            {
+                text: "천 리 길도 한 걸음부터 시작된다.",
+                author: "노자"
+            },
+            {
+                text: "나는 생각한다, 고로 나는 존재한다.",
+                author: "르네 데카르트"
+            },
+            {
+                text: "성공은 최종적인 것이 아니며, 실패는 치명적인 것이 아니다. 중요한 것은 계속하려는 용기다.",
+                author: "윈스턴 처칠"
+            },
+            {
+                text: "당신이 할 수 있다고 믿든, 할 수 없다고 믿든, 당신이 옳다.",
+                author: "헨리 포드"
+            },
+            {
+                text: "미래를 예측하는 가장 좋은 방법은 그것을 만들어 나가는 것이다.",
+                author: "피터 드러커"
+            },
+            {
+                text: "행복은 도착지가 아니라 여행의 방식이다.",
+                author: "로이 굿맨"
+            },
+            {
+                text: "삶이 있는 한 희망은 있다.",
+                author: "키케로"
+            },
+            {
+                text: "오늘 할 수 있는 일을 내일로 미루지 마라.",
+                author: "벤자민 프랭클린"
+            },
+            {
+                text: "세상에서 가장 어려운 일은 사람의 마음을 바꾸는 것이다.",
+                author: "알버트 아인슈타인"
+            },
+            {
+                text: "위대한 일을 하는 유일한 방법은 당신이 하는 일을 사랑하는 것이다.",
+                author: "스티브 잡스"
+            },
+            {
+                text: "두려움을 느끼더라도 어쨌든 해라.",
+                author: "수잔 제퍼스"
+            },
+            {
+                text: "지식은 힘이다.",
+                author: "프랜시스 베이컨"
+            },
+            {
+                text: "나 자신에 대한 자신감을 잃으면 온 세상이 나의 적이 된다.",
+                author: "랄프 왈도 에머슨"
+            },
+            {
+                text: "배움에는 끝이 없다.",
+                author: "공자"
+            }
+        ];
+
+        let currentIndex = 0;
+
+        function displayQuote() {
+            const quote = quotes[currentIndex];
+
+            const quoteEl = document.getElementById('quote');
+            const authorEl = document.getElementById('author');
+            const numberEl = document.getElementById('number');
+
+            quoteEl.style.animation = 'none';
+            authorEl.style.animation = 'none';
+
+            void quoteEl.offsetWidth;
+
+            quoteEl.textContent = quote.text;
+            authorEl.textContent = quote.author;
+            numberEl.textContent = `${currentIndex + 1} / ${quotes.length}`;
+
+            quoteEl.style.animation = 'fadeIn 0.8s ease forwards';
+            authorEl.style.animation = 'fadeIn 0.8s ease 0.3s forwards';
+        }
+
+        function showRandomQuote() {
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * quotes.length);
+            } while (newIndex === currentIndex && quotes.length > 1);
+            currentIndex = newIndex;
+            displayQuote();
+        }
+
+        function showPrevQuote() {
+            currentIndex = (currentIndex - 1 + quotes.length) % quotes.length;
+            displayQuote();
+        }
+
+        function showNextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            displayQuote();
+        }
+
+        displayQuote();
+    </script>
+</body>
+</html>
